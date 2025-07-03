@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,21 +14,19 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: jenkins/jenkins:lts
+          image: <your-dockerhub-username>/jenkins-docker:lts
           ports:
             - containerPort: 8080
-            - containerPort: 50000  # for agent communication
+            - containerPort: 50000  # agent port
           volumeMounts:
             - name: jenkins-home
               mountPath: /var/jenkins_home
             - name: docker-socket
               mountPath: /var/run/docker.sock
-
       volumes:
         - name: docker-socket
           hostPath:
             path: /var/run/docker.sock
-            
         - name: jenkins-home
           persistentVolumeClaim:
             claimName: jenkins-pvc
