@@ -24,7 +24,9 @@ spec:
             - name: docker-socket
               mountPath: /var/run/docker.sock
           securityContext:
-            runAsUser: 0
+            runAsUser: 1000          # usually jenkins UID
+            runAsGroup: 996          # docker group GID from host
+            fsGroup: 996         # docker group GID from host
       volumes:
         - name: docker-socket
           hostPath:
