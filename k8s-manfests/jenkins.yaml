@@ -22,10 +22,17 @@ spec:
           volumeMounts:
             - name: jenkins-home
               mountPath: /var/jenkins_home
-      volumes:
-        - name: jenkins-home
-          persistentVolumeClaim:
-            claimName: jenkins-pvc
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
+
+volumes:
+  - name: docker-socket
+    hostPath:
+      path: /var/run/docker.sock
+      
+  - name: jenkins-home
+    persistentVolumeClaim:
+      claimName: jenkins-pvc
 ---
 apiVersion: v1
 kind: Service
