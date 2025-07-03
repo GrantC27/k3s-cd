@@ -35,7 +35,12 @@ spec:
   selector:
     app: node-red
   ports:
-    - protocol: TCP
+    - name: mqtt
+      protocol: TCP
+      port: 1883       # External port exposed by the LoadBalancer
+      targetPort: 1883 # Port inside the pod/container
+    - name: node-red
+      protocol: TCP
       port: 1880
       targetPort: 1880
   type: LoadBalancer
