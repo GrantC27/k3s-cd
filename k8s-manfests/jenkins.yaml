@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: jenkins
-          image: <your-dockerhub-username>/jenkins-docker:lts
+          image: grantc27/jenkins-docker:lts
           ports:
             - containerPort: 8080
             - containerPort: 50000  # agent port
