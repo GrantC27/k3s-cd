@@ -38,4 +38,7 @@ spec:
     - protocol: TCP
       port: 1880
       targetPort: 1880
+    - protocol: TCP
+      port: 1883
+      targetPort: 1883
   type: LoadBalancer
