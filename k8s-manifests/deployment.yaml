@@ -26,13 +26,13 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 80
+              port: 800
             initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /
-              port: 80
+              port: 800
             initialDelaySeconds: 5
             periodSeconds: 10
 
@@ -47,4 +47,4 @@ spec:
     app: k3s-web-app
   ports:
     - port: 8001
-      targetPort: 80
+      targetPort: 800
