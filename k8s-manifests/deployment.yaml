@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: grantc27/grantcampbell-test
+          image: grantc27/grantcampbell-test:d123b84
           ports:
             - containerPort: 80
           resources:
