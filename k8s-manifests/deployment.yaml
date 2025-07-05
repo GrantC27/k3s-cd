@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,9 +16,9 @@ spec:
     spec:
       containers:
         - name: web
-          image: grantc27/grantcampbell-test  # Jenkins will update this tag
+          image: grantc27/grantcampbell-test
           ports:
-            - containerPort: 800
+            - containerPort: 80
           resources:
             limits:
               memory: "128Mi"
@@ -47,5 +46,5 @@ spec:
   selector:
     app: k3s-web-app
   ports:
-    - port: 8001
-      targetPort: 80
+    - port: 8001         # Exposes externally on NodePort/LoadBalancer
+      targetPort: 80     # Inside the container
