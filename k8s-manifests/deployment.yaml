@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: grantc27/grantcampbell-test:ab52832
+          image: bitnami/minideb:latest
           ports:
             - containerPort: 80
           resources:
