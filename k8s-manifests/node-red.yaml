@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-red
+  name: k3s-cd-web
   labels:
-    app: node-red
+    app: k3s-cd-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: node-red
+      app: k3s-cd-web
   template:
     metadata:
       labels:
-        app: node-red
+        app: k3s-cd-web
     spec:
       containers:
-        - name: node-red
-          image: nodered/node-red:latest
+        - name: k3s-cd-web
+          image: grantc27/grantcampbell-test:latest
           ports:
-            - containerPort: 1880
+            - containerPort: 80
           resources:
             limits:
               cpu: 500m
@@ -26,21 +26,17 @@ spec:
             requests:
               cpu: 250m
               memory: 128Mi
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-red
+  name: k3s-web-app-service
 spec:
-  selector:
-    app: node-red
-  ports:
-    - name: mqtt
-      protocol: TCP
-      port: 1883       # External port exposed by the LoadBalancer
-      targetPort: 1883 # Port inside the pod/container
-    - name: node-red
-      protocol: TCP
-      port: 1880
-      targetPort: 1880
   type: LoadBalancer
+  selector:
+    app: k3s-web-app
+  ports:
+    - port: 8001         # Exposes externally on NodePort/LoadBalancer
+      targetPort: 80     # Inside the container
+
