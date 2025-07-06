@@ -1,40 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k3s-web-app
+  name: k3s-cd-web
   labels:
-    app: k3s-web-app
+    app: k3s-cd-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: k3s-web-app
+      app: k3s-cd-web
   template:
     metadata:
       labels:
-        app: k3s-web-app
+        app: k3s-cd-web
     spec:
       containers:
-        - name: web
-          image: bitnami/minideb:latest
+        - name: k3s-cd-web
+          image: grantc27/grantcampbell-test:latest
           ports:
             - containerPort: 80
           resources:
             limits:
-              memory: "128Mi"
-              cpu: "500m"
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 10
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 10
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 128Mi
 
 ---
 apiVersion: v1
