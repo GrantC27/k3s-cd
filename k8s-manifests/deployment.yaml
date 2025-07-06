@@ -5,7 +5,7 @@ metadata:
   labels:
     app: k3s-web-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: k3s-web-app
