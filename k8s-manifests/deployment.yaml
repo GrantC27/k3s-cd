@@ -33,11 +33,10 @@ kind: Service
 metadata:
   name: k3s-cd-web-service
 spec:
-  type: NodePort  # Change to LoadBalancer if needed
+  type: LoadBalancer  # Change to LoadBalancer if needed
   selector:
     app: k3s-web-app
   ports:
     - port: 8001         # Exposes externally on NodePort/LoadBalancer
       targetPort: 80     # Inside the container
-      nodePort: 30001    # NodePort for direct access
       protocol: TCP
