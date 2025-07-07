@@ -35,7 +35,7 @@ metadata:
 spec:
   type: LoadBalancer  # Change to LoadBalancer if needed
   selector:
-    app: k3s-web-app
+    app: k3s-cd-web
   ports:
     - port: 8001         # Exposes externally on NodePort/LoadBalancer
       targetPort: 80     # Inside the container
