@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: k3s-cd-web
-          image: grantc27/grantcampbell-test:32840ff
+          image: grantc27/grantcampbell-test:acfd2e3
           ports:
             - containerPort: 80
           resources:
