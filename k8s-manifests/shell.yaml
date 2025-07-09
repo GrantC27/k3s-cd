@@ -13,31 +13,12 @@ spec:
       labels:
         app: web-shell-ttyd
     spec:
-      hostNetwork: true
-      hostPID: true
       containers:
       - name: web-shell
         image: tsl0922/ttyd:latest
         args: ["-p", "7681", "bash"]
         ports:
         - containerPort: 7681
-        securityContext:
-          privileged: true
-          runAsUser: 0
-        volumeMounts:
-        - name: host-root
-          mountPath: /host
-        - name: docker-sock
-          mountPath: /var/run/docker.sock
-      volumes:
-      - name: host-root
-        hostPath:
-          path: /
-          type: Directory
-      - name: docker-sock
-        hostPath:
-          path: /var/run/docker.sock
-          type: Socket
 ---
 apiVersion: v1
 kind: Service
