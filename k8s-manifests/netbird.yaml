@@ -3,7 +3,13 @@ kind: DaemonSet
 metadata:
   name: netbird
 spec:
+  selector:
+    matchLabels:
+      app: netbird
   template:
+    metadata:
+      labels:
+        app: netbird
     spec:
       hostNetwork: true
       containers:
