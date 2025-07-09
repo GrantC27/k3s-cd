@@ -13,8 +13,6 @@ spec:
       labels:
         app: web-shell
     spec:
-      hostNetwork: true
-      hostPID: true
       containers:
       - name: web-shell
         image: wettyoss/wetty:latest
