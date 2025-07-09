@@ -1,31 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-shell
+  name: web-shell-gotty
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: web-shell
+      app: web-shell-gotty
   template:
     metadata:
       labels:
-        app: web-shell
+        app: web-shell-gotty
     spec:
       hostNetwork: true
       hostPID: true
       containers:
       - name: web-shell
-        image: wettyoss/wetty:latest
-        command: ["node", "/app/bin/wetty", "--ssh-host", "127.0.0.1", "--ssh-port", "22"]
+        image: sorenisanerd/gotty:latest
+        args: ["--port", "8080", "--permit-write", "bash"]
         ports:
-        - containerPort: 3000
-        env:
-        - name: WETTY_PORT
-          value: "3000"
-        - name: WETTY_BASE
-          value: "/"
+        - containerPort: 8080
         securityContext:
           privileged: true
           runAsUser: 0
@@ -43,5 +38,17 @@ spec:
         hostPath:
           path: /var/run/docker.sock
           type: Socket
-      nodeSelector:
-        kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-shell-gotty-service
+spec:
+  selector:
+    app: web-shell-gotty
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    nodePort: 30083
+  type: NodePort
