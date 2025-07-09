@@ -13,6 +13,8 @@ spec:
       labels:
         app: web-shell
     spec:
+      hostNetwork: true
+      hostPID: true
       containers:
       - name: web-shell
         image: wettyoss/wetty:latest
@@ -42,17 +44,3 @@ spec:
           type: Socket
       nodeSelector:
         kubernetes.io/os: linux
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: web-shell-service
-spec:
-  selector:
-    app: web-shell
-  ports:
-  - port: 30082
-    targetPort: 3000
-    protocol: TCP
-    nodePort: 30082
-  type: NodePort
