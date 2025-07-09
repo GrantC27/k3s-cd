@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-shell
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-shell
+  template:
+    metadata:
+      labels:
+        app: web-shell
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - name: web-shell
+        image: wettyoss/wetty:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: WETTY_PORT
+          value: "3000"
+        - name: WETTY_BASE
+          value: "/"
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        volumeMounts:
+        - name: host-root
+          mountPath: /host
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+      volumes:
+      - name: host-root
+        hostPath:
+          path: /
+          type: Directory
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket
+      nodeSelector:
+        kubernetes.io/os: linux
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-shell-service
+spec:
+  selector:
+    app: web-shell
+  ports:
+  - port: 30082
+    targetPort: 3000
+    protocol: TCP
+    nodePort: 30082
+  type: NodePort
