@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: netbird
+spec:
+  template:
+    spec:
+      hostNetwork: true
+      containers:
+      - name: netbird
+        image: netbirdio/netbird:latest
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: netbird-config
+          mountPath: /etc/netbird
+      volumes:
+      - name: netbird-config
+        hostPath:
+          path: /etc/netbird
