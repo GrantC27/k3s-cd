@@ -18,7 +18,7 @@ spec:
       containers:
       - name: web-shell
         image: wettyoss/wetty:latest
-        command: ["wetty", "--ssh-host", "127.0.0.1", "--ssh-port", "22"]
+        command: ["node", "/app/bin/wetty", "--ssh-host", "127.0.0.1", "--ssh-port", "22"]
         ports:
         - containerPort: 3000
         env:
