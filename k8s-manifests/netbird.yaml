@@ -1,26 +1,49 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: netbird
+  name: netbird-management
+  namespace: netbird
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: netbird
+      app: netbird-management
   template:
     metadata:
       labels:
-        app: netbird
+        app: netbird-management
     spec:
-      hostNetwork: true
       containers:
-      - name: netbird
-        image: netbirdio/netbird:latest
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: netbird-config
-          mountPath: /etc/netbird
-      volumes:
-      - name: netbird-config
-        hostPath:
-          path: /etc/netbird
+      - name: management
+        image: netbirdio/management:latest
+        env:
+        - name: NB_MANAGEMENT_SERVER_HOST
+          value: "0.0.0.0"
+        - name: NB_MANAGEMENT_SERVER_PORT
+          value: "33073"
+        - name: NB_MANAGEMENT_ADMIN_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: netbird-management-secret
+              key: NB_MANAGEMENT_ADMIN_EMAIL
+        - name: NB_MANAGEMENT_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: netbird-management-secret
+              key: NB_MANAGEMENT_ADMIN_PASSWORD
+        ports:
+        - containerPort: 33073
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netbird-management
+  namespace: netbird
+spec:
+  type: NodePort
+  ports:
+  - port: 33073
+    targetPort: 33073
+    nodePort: 30073
+  selector:
+    app: netbird-management
