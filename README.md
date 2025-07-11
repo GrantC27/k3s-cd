@@ -7,21 +7,21 @@ This project demonstrates a complete CI/CD pipeline for deploying a web applicat
 # Key Components:
 
 Development Flow: Developer → Git → Jenkins webhook trigger
-- 1. CI/CD Pipeline: 4-stage Jenkins pipeline (Build → Test → Docker → Deploy)
-- 2. k3s Cluster:
+- CI/CD Pipeline: 4-stage Jenkins pipeline (Build → Test → Docker → Deploy)
+- k3s Cluster:
    - 1 Master node with control plane components
    - 3 Worker nodes with kubelet and kube-proxy
    - Pods distributed across workers for high availability
-- 3. NFS Storage: Shared persistent storage mounted on all nodes
-- 4. Infrastructure as Code: Kubernetes manifests for deployment
-- 5. Secrets Management: Multiple layers (build args, env vars, k8s secrets)
+- NFS Storage: Shared persistent storage mounted on all nodes
+- Infrastructure as Code: Kubernetes manifests for deployment
+- Secrets Management: Multiple layers (build args, env vars, k8s secrets)
 
 Architecture Highlights:
-- 1. High Availability: Multi-node setup with pod replication
-- 2. Scalability: Horizontal pod scaling across worker nodes
-- 3. Persistent Storage: NFS-backed persistent volumes
-- 4. Security: Proper secrets management at build and runtime
-- 5. Automation: Full CI/CD pipeline from code to deployment
+- High Availability: Multi-node setup with pod replication
+- Scalability: Horizontal pod scaling across worker nodes
+- Persistent Storage: NFS-backed persistent volumes
+- Security: Proper secrets management at build and runtime
+- Automation: Full CI/CD pipeline from code to deployment
 
 
 ## Project Overview
