@@ -1,0 +1,164 @@
+@startuml DevOps Pipeline Architecture
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam componentStyle rectangle
+skinparam linetype ortho
+skinparam PackageBorderThickness 2
+skinparam ArrowThickness 1
+skinparam ArrowColor #2D4159
+skinparam PackageTitleAlignment left
+
+!define AWSPUML https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v15.0/dist
+!includeurl AWSPUML/AWSCommon.puml
+!theme bluegray
+
+package "Development" {
+    [Developer] as dev
+    [Git Repository] as git
+}
+
+package "CI/CD Pipeline" {
+    package "Jenkins" {
+        [Jenkins Master] as jenkins
+        rectangle "Pipeline Stages" {
+            [Build Stage] as build
+            [Test Stage] as test
+            [Docker Build] as docker_build
+            [Deploy Stage] as deploy
+        }
+    }
+    [Docker Registry] as registry
+}
+
+package "Kubernetes Cluster (k3s)" {
+    package "Master Node" {
+        [k3s Master] as master
+        [API Server] as api
+        [etcd] as etcd
+        [Controller Manager] as controller
+        [Scheduler] as scheduler
+    }
+    package "Worker Node 1" {
+        [kubelet-1] as kubelet1
+        [kube-proxy-1] as proxy1
+        rectangle "Pods" {
+            [React App Pod-1] as app1
+            [Node.js API Pod-1] as api1
+        }
+    }
+    package "Worker Node 2" {
+        [kubelet-2] as kubelet2
+        [kube-proxy-2] as proxy2
+        rectangle "Pods" {
+            [React App Pod-2] as app2
+            [Node.js API Pod-2] as api2
+        }
+    }
+}
+
+
+[Load Balancer] as lb
+lb --> app1 : "Traffic distribution"
+lb --> app2 : "Traffic distribution"
+
+
+package "Shared Storage" {
+    [NFS Server] as nfs
+    database "Persistent Volumes" {
+        [PV-1] as pv1
+        [PV-2] as pv2
+    }
+}
+
+
+package "Infrastructure as Code" {
+    [Kubernetes Manifests] as manifests
+    [Deployment YAML] as deployment
+    [Service YAML] as service
+    [ConfigMap YAML] as configmap
+    [Secret YAML] as secrets
+}
+
+package "Secrets Management" {
+    [Build Args] as build_args
+    [Environment Variables] as env_vars
+    [Kubernetes Secrets] as k8s_secrets
+}
+
+' Development Flow
+dev --> git : "Push code"
+git --> jenkins : "Webhook trigger"
+
+' CI/CD Pipeline Flow
+jenkins --> build : "1. Build"
+build --> test : "2. Test"
+test --> docker_build : "3. Containerize"
+docker_build --> registry : "Push image"
+docker_build --> deploy : "4. Deploy"
+
+' Deployment Flow
+deploy --> api : "kubectl apply"
+manifests --> deploy : "Uses manifests"
+deployment --> deploy
+service --> deploy
+configmap --> deploy
+secrets --> deploy
+
+' Kubernetes Internal
+api --> controller
+api --> scheduler
+api --> etcd
+master --> kubelet1
+master --> kubelet2
+
+' Pod Distribution
+kubelet1 --> app1
+kubelet1 --> api1
+kubelet2 --> app2
+kubelet2 --> api2
+
+' Storage Connections
+nfs --> pv1 : "NFS Mount"
+nfs --> pv2 : "NFS Mount"
+
+pv1 --> app1 : "Persistent Storage"
+pv2 --> app2 : "Persistent Storage"
+
+' Secrets Flow
+build_args --> docker_build : "Build-time secrets"
+env_vars --> jenkins : "Runtime config"
+k8s_secrets --> app1 : "API Keys"
+k8s_secrets --> app2 : "API Keys"
+k8s_secrets --> api1 : "Database creds"
+k8s_secrets --> api2 : "Database creds"
+
+
+note right of jenkins
+  Automated CI/CD Pipeline:
+  - Code checkout
+  - Build & Test
+  - Docker containerization
+  - Kubernetes deployment
+end note
+
+note bottom of nfs
+  NFS provides shared persistent
+  storage across all worker nodes
+  for high availability
+end note
+
+note top of master
+  k3s Master Node manages:
+  - API Server
+  - etcd cluster state
+  - Controller Manager
+  - Scheduler
+end note
+
+note bottom of lb
+  External access point
+  distributing traffic across
+  all application replicas
+end note
+
+@enduml
