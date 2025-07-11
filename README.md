@@ -17,11 +17,11 @@ This project demonstrates a complete CI/CD pipeline for deploying a web applicat
 - **Secrets Management:** Multiple layers (build args, env vars, k8s secrets)
 
  # Architecture Highlights:
-  **High Availability:** Multi-node setup with pod replication
-  **Scalability:** Horizontal pod scaling across worker nodes
-  **Persistent Storage:** NFS-backed persistent volumes
-  **Security:** Proper secrets management at build and runtime
-  **Automation:** Full CI/CD pipeline from code to deployment
+- **High Availability:** Multi-node setup with pod replication
+- **Scalability:** Horizontal pod scaling across worker nodes
+- **Persistent Storage:** NFS-backed persistent volumes
+- **Security:** Proper secrets management at build and runtime
+- **Automation:** Full CI/CD pipeline from code to deployment
 
 
 ## Project Overview
