@@ -4,7 +4,7 @@
 
 This project demonstrates a complete CI/CD pipeline for deploying a web application to a multi-node Kubernetes cluster. It showcases best practices in automation, containerization, and scalable cloud-native deployments.
 
-# Key Components:
+## Key Components:
 
 - **Development Flow:** Developer → Git → Jenkins webhook trigger
 - **CI/CD Pipeline:** 4-stage Jenkins pipeline (Build → Test → Docker → Deploy)
@@ -16,7 +16,7 @@ This project demonstrates a complete CI/CD pipeline for deploying a web applicat
 - **Infrastructure as Code:** Kubernetes manifests for deployment
 - **Secrets Management:** Multiple layers (build args, env vars, k8s secrets)
 
- # Architecture Highlights:
+## Architecture Highlights:
 - **High Availability:** Multi-node setup with pod replication
 - **Scalability:** Horizontal pod scaling across worker nodes
 - **Persistent Storage:** NFS-backed persistent volumes
